@@ -7,3 +7,8 @@
     const txt="Om";
     console.log(txt);
 })();
+
+(function(message){
+    const txt="Om";
+    console.log(message,txt);
+})("Hello ");
