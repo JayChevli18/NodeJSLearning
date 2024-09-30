@@ -3,12 +3,12 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 const events = require('events');
-const replaceHTML=require('./Modules/replaceHTML');
+const replaceHTML = require('./Modules/replaceHTML');
 
 const html = fs.readFileSync('./Template/index.html', 'utf-8');
 let products = JSON.parse(fs.readFileSync('./Data/products.json', 'utf-8'));
 let productListHtml = fs.readFileSync('./Template/product-list.html', 'utf-8');
-let productDetailHTML=fs.readFileSync('./Template/product-details.html', 'utf-8');
+let productDetailHTML = fs.readFileSync('./Template/product-details.html', 'utf-8');
 
 // let productHtmlArray = products.map((prod) => {
 //     let output = productListHtml.replace('{{%IMAGE%}}', prod.productImage);
@@ -37,12 +37,69 @@ let productDetailHTML=fs.readFileSync('./Template/product-details.html', 'utf-8'
 //     return output;
 // }
 
-const server = http.createServer((req, res) => {
+
+//Without Event Driven Architecture:
+// const server = http.createServer((req, res) => {
+
+//     let { query, pathname: path } = url.parse(req.url, true);
+
+
+//     //    let path=req.url;
+
+//     if (path === '/' || path.toLocaleLowerCase() === '/home') {
+//         res.writeHead(200, {
+//             'Content-Type': 'text/html',
+//             'my-header': 'Hello world'
+//         });
+//         res.end(html.replace('{{%CONTENT%}}', productListHtml));
+//     }
+//     else if (path.toLocaleLowerCase() === '/about') {
+//         res.writeHead(200, {
+//             'Content-Type': 'text/html',
+//             'my-header': 'Hello world'
+//         });
+//         res.end(html.replace('{{%CONTENT%}}', 'You are in ABOUT page'));
+//     }
+//     else if (path.toLocaleLowerCase() === '/contact') {
+//         res.writeHead(200, {
+//             'Content-Type': 'text/html',
+//             'my-header': 'Hello world'
+//         });
+//         res.end(html.replace('{{%CONTENT%}}', 'You are in Contact page'));
+//     }
+//     else if (path.toLocaleLowerCase() === '/products') {
+//         if (!query.id) {
+//             let productHtmlArray = products.map((prod) => {
+//                 return replaceHTML(productListHtml, prod);
+//             })
+//             let productResponseHtml = html.replace('{{%CONTENT%}}', productHtmlArray.join(','));
+//             res.writeHead(200, {
+//                 'Content-type': 'text/html'
+//             })
+//             res.end(productResponseHtml);
+//         }
+//         else {
+//             let prod=products[query.id];
+//             let productDetailsResponseHTML=replaceHTML(productDetailHTML, prod);
+//             res.end(html.replace('{{%CONTENT%}}', productDetailsResponseHTML));
+//         }
+//     }
+//     else {
+//         res.writeHead(404, {
+//             'Content-Type': 'text/html',
+//             'my-header': 'Hello world!'
+//         })
+//         res.end(html.replace('{{%CONTENT%}}', 'Error 404: Page Not Found'))
+//     }
+
+// })
+
+//With Event Driven Architecture:
+const server = http.createServer();
+
+server.on('request', (req, res) => {
 
     let { query, pathname: path } = url.parse(req.url, true);
-
-
-    //    let path=req.url;
 
     if (path === '/' || path.toLocaleLowerCase() === '/home') {
         res.writeHead(200, {
@@ -77,8 +134,8 @@ const server = http.createServer((req, res) => {
             res.end(productResponseHtml);
         }
         else {
-            let prod=products[query.id];
-            let productDetailsResponseHTML=replaceHTML(productDetailHTML, prod);
+            let prod = products[query.id];
+            let productDetailsResponseHTML = replaceHTML(productDetailHTML, prod);
             res.end(html.replace('{{%CONTENT%}}', productDetailsResponseHTML));
         }
     }
@@ -91,7 +148,6 @@ const server = http.createServer((req, res) => {
     }
 
 })
-
 
 
 server.listen(4000, () => {
