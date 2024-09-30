@@ -3,7 +3,11 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 const events = require('events');
+
+
 const replaceHTML = require('./Modules/replaceHTML');
+const user=require('./Modules/user');
+
 
 const html = fs.readFileSync('./Template/index.html', 'utf-8');
 let products = JSON.parse(fs.readFileSync('./Data/products.json', 'utf-8'));
@@ -153,3 +157,18 @@ server.on('request', (req, res) => {
 server.listen(4000, () => {
     console.log("Server Started at port 4000");
 })
+
+
+//Emitting & Handling Custom Events
+
+let myEmitter=new user();
+
+myEmitter.on('userCreated', (id, name)=>{
+    console.log(`User: ${name}, ID: ${id}`);
+})
+
+myEmitter.on('userCreated', (id, name)=>{
+    console.log(`New Event:- User: ${name}, ID: ${id}`);
+})
+
+myEmitter.emit('userCreated', 101,'Om');
