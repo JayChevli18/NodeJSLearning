@@ -3,6 +3,7 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 const events = require('events');
+const replaceHTML=require('./Modules/replaceHTML');
 
 const html = fs.readFileSync('./Template/index.html', 'utf-8');
 let products = JSON.parse(fs.readFileSync('./Data/products.json', 'utf-8'));
@@ -22,19 +23,19 @@ let productDetailHTML=fs.readFileSync('./Template/product-details.html', 'utf-8'
 //     return output;
 // })
 
-function replaceHTML(template, product) {
-    let output = template.replace('{{%IMAGE%}}', product.productImage);
-    output = output.replace('{{%NAME%}}', product.name);
-    output = output.replace('{{%MODELNAME%}}', product.modeName);
-    output = output.replace('{{%MODELNO%}}', product.modelNumber);
-    output = output.replace('{{%SIZE%}}', product.size);
-    output = output.replace('{{%CAMERA%}}', product.camera);
-    output = output.replace('{{%PRICE%}}', product.price);
-    output = output.replace('{{%COLOR%}}', product.color);
-    output = output.replace('{{%ID%}}', product.id);
-    output=output.replace('{{%DESC%}}', product.Description);
-    return output;
-}
+// function replaceHTML(template, product) {
+//     let output = template.replace('{{%IMAGE%}}', product.productImage);
+//     output = output.replace('{{%NAME%}}', product.name);
+//     output = output.replace('{{%MODELNAME%}}', product.modeName);
+//     output = output.replace('{{%MODELNO%}}', product.modelNumber);
+//     output = output.replace('{{%SIZE%}}', product.size);
+//     output = output.replace('{{%CAMERA%}}', product.camera);
+//     output = output.replace('{{%PRICE%}}', product.price);
+//     output = output.replace('{{%COLOR%}}', product.color);
+//     output = output.replace('{{%ID%}}', product.id);
+//     output=output.replace('{{%DESC%}}', product.Description);
+//     return output;
+// }
 
 const server = http.createServer((req, res) => {
 
