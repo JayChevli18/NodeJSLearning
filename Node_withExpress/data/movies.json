@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "Blood Shot",
+        "releaseYear": 2022,
+        "duration": 120
+    },
+    {
+        "id": 2,
+        "name": "Blade",
+        "releaseYear": 2015,
+        "duration": 190
+    },
+    {
+        "id": 3,
+        "name": "Blue",
+        "releaseYear": 2010,
+        "duration": 150
+    },
+    {
+        "id": 4,
+        "name": "Race",
+        "releaseYear": 2012,
+        "duration": 160
+    },
+    {
+        "id": 5,
+        "name": "Race3",
+        "releaseYear": 2018,
+        "duration": 160
+    }
+]
