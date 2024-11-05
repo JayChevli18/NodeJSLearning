@@ -12,6 +12,10 @@ app.use(express.json());
 //3rd party Middleware:
 app.use(morgan("dev"));
 
+//Static file
+app.use(express.static('./public'));//access html file via http://localhost:4000/templates/demo.html
+
+
 //custom middleware:
 const logger=(req,res,next)=>{
     console.log("Custom middleware logger is called!");
