@@ -1,5 +1,6 @@
 const express=require("express");
 const fs=require("fs");
+const morgan = require("morgan");
 
 
 
@@ -7,6 +8,9 @@ let app=express();
 let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
 
 app.use(express.json());
+
+//3rd party Middleware:
+app.use(morgan("dev"));
 
 //custom middleware:
 const logger=(req,res,next)=>{
