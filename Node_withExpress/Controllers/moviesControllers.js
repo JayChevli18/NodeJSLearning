@@ -2,6 +2,39 @@ const fs=require("fs");
 let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
 
 
+//middleware for checking id in params
+exports.checkId=(req, res, next, value)=>{
+    console.log("Movie ID: "+value);
+
+    let movie=movies.find(el=>el.id===value*1);
+
+    if(!movie){
+        return res.status(404).json({
+            status:"fail",
+            message:`Movie with ID ${value} not Found!`
+        })
+    }
+
+    next();
+
+}
+
+
+//middleware for checking the body in the req object
+
+exports.validateBody=(req, res, next)=>{
+    if(!req.body.name || !req.body.releaseYear){
+        return res.status(400).json({
+            status:"fail",
+            message:"Not a valid movie data"
+        });
+    }
+    next();
+}
+
+
+
+
 exports.getAllMovie=(req, res)=>{
     res.status(200).json({
         status:"success",
@@ -35,12 +68,12 @@ exports.getMovieByID=(req, res)=>{
 
     let movie=movies.find(el=>el.id===id);
 
-    if(!movie){
-        return res.status(404).json({
-            status:"fail",
-            message:`Movie with ID ${id} not Found!`
-        })
-    }
+    // if(!movie){
+    //     return res.status(404).json({
+    //         status:"fail",
+    //         message:`Movie with ID ${id} not Found!`
+    //     })
+    // }
 
     res.status(200).json({
         status:"success",
@@ -54,12 +87,12 @@ exports.updateMovieByID=(req, res)=>{
     let id=req.params.id*1;
     let movieUpdate=movies.find(el=>el.id===id);
 
-    if(!movieUpdate){
-        res.status(404).json({
-            status:"fail",
-            message:`No movie with ID: ${id} is founnd!`
-        })
-    }
+    // if(!movieUpdate){
+    //     res.status(404).json({
+    //         status:"fail",
+    //         message:`No movie with ID: ${id} is founnd!`
+    //     })
+    // }
 
     let index=movies.indexOf(movieUpdate);
 
@@ -83,12 +116,12 @@ exports.deleteMovieByID=(req,res)=>{
     const movieToDelete=movies.find(el=>el.id===id);
     const index=movies.indexOf(movieToDelete);
 
-    if(!movieToDelete){
-        res.status(404).json({
-            status:"fail",
-            message:`No movie with ID: ${id} is founnd!`
-        })
-    }
+    // if(!movieToDelete){
+    //     res.status(404).json({
+    //         status:"fail",
+    //         message:`No movie with ID: ${id} is founnd!`
+    //     })
+    // }
 
 
     movies.splice(index,1);
