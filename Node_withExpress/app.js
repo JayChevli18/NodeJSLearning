@@ -8,6 +8,19 @@ let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
 
 app.use(express.json());
 
+//custom middleware:
+const logger=(req,res,next)=>{
+    console.log("Custom middleware logger is called!");
+    next();
+}
+app.use(logger);
+
+app.use((req,res, next)=>{
+    req.requestedAt=new Date().toISOString();
+    next();
+})
+
+
 app.get('/', (req, res)=>{
     res.status(200).send("<h1>Hell From Server</h1");
 })
@@ -22,6 +35,7 @@ const getAllMovie=(req, res)=>{
     res.status(200).json({
         status:"success",
         count:movies.length,
+        requestedAt:req.requestedAt,
         data:{
             movies:movies
         }
