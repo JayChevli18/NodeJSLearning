@@ -2,5 +2,5 @@
 node_modules
 
 
-./mongoDB/.env
-./Node_withExpress/.env
+/mongoDB/.env
+/Node_withExpress/.env
