@@ -1,2 +1,6 @@
 ./new/node_modules
 node_modules
+
+
+./mongoDB/.env
+./Node_withExpress/.env
