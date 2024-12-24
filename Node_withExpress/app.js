@@ -1,7 +1,46 @@
 const express=require("express");
 // const fs=require("fs");
 const morgan = require("morgan");
-const moviesRouter=require('./Routes/moviesRoutes')
+const mongoose=require("mongoose");
+const moviesRouter=require('./Routes/moviesRoutes');
+
+mongoose.connect("mongodb+srv://chevlijay70:chevlijay70@cluster0.gd3xicl.mongodb.net/",{
+    useNewUrlParser:true
+}).then((conn)=>console.log("conn")).catch((err)=>{console.log("errpr", err)});
+
+const movieSchema=new mongoose.Schema({
+    name:{
+        type: String,
+        required: [true, 'Name is Required!'],
+        unique: true
+    },
+
+    description: String,
+
+    duration:{
+        type: Number,
+        required: [true, 'Duration is required!']
+    },
+    ratings:{
+        type: Number,
+        default: 1.0
+    } 
+});
+
+const Movie=mongoose.model('Movie', movieSchema);
+
+const testMovie=new Movie({
+    name:"Ghost Rider",
+    description:"An Action - Drama film.",
+    duration: 100
+})
+
+testMovie.save().then((doc)=>{
+    console.log(doc);
+})
+.catch((err)=>{
+    console.log("Error Occurred: ", err);
+});
 
 
 let app=express();
