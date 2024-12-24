@@ -3,7 +3,7 @@ const movieController=require('../Controllers/moviesControllers');
 
 const router=express.Router();
 
-router.param('id', movieController.checkId)
+//router.param('id', movieController.checkId)
 
 router.route('/')
     .get(movieController.getAllMovie)

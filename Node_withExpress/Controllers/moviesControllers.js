@@ -38,15 +38,36 @@ exports.validateBody=(req, res, next)=>{
 
 
 
-exports.getAllMovie=(req, res)=>{
-    res.status(200).json({
-        status:"success",
-        count:movies.length,
-        requestedAt:req.requestedAt,
-        data:{
-            movies:movies
-        }
-    })
+exports.getAllMovie= async (req, res)=>{
+    //using fs:
+    // res.status(200).json({
+    //     status:"success",
+    //     count:movies.length,
+    //     requestedAt:req.requestedAt,
+    //     data:{
+    //         movies:movies
+    //     }
+    // })
+
+
+    //Using Mongo:
+    try{
+        const movie=await Movie.find();
+
+        res.status(200).json({
+            status:"success",
+            length:movie.length,
+            data:{
+                movie
+            }
+        })
+    }
+    catch(err){
+        res.status(404).json({
+            status:"fail",
+            message:err.message
+        })
+    }
 }
 
 exports.createMovie= async (req, res)=>{
@@ -89,10 +110,10 @@ exports.createMovie= async (req, res)=>{
 }
 
 
-exports.getMovieByID=(req, res)=>{
-    const id=req.params.id*1;
+exports.getMovieByID= async (req, res)=>{
+    // const id=req.params.id*1;
 
-    let movie=movies.find(el=>el.id===id);
+    // let movie=movies.find(el=>el.id===id);
 
     // if(!movie){
     //     return res.status(404).json({
@@ -101,12 +122,33 @@ exports.getMovieByID=(req, res)=>{
     //     })
     // }
 
-    res.status(200).json({
-        status:"success",
-        data:{
-            movie:movie
-        }
-    })
+    // res.status(200).json({
+    //     status:"success",
+    //     data:{
+    //         movie:movie
+    //     }
+    // })
+
+
+    //Using Mongo:
+
+    try{
+        const movie=await Movie.findById(req.params.id);
+        // console.log(req.params.id);
+        // console.log(movie);
+        res.status(200).json({
+            status:"success",
+            data:{
+                movie
+            }
+        });
+    }
+    catch(err){
+        res.status(400).json({
+            status:"fail",
+            message:err.message
+        })
+    }
 }
 
 exports.updateMovieByID=(req, res)=>{
