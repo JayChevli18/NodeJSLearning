@@ -1,5 +1,8 @@
 const fs=require("fs");
-let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
+//const movies=require('../Model/movieModel.js');
+const Movie = require("../Model/movieModel.js");
+
+//let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
 
 
 //middleware for checking id in params
@@ -46,20 +49,43 @@ exports.getAllMovie=(req, res)=>{
     })
 }
 
-exports.createMovie=(req, res)=>{
-    const newId=movies[movies.length-1].id+1;
-    const newMovie=Object.assign({id:newId}, req.body);
+exports.createMovie= async (req, res)=>{
 
-    movies.push(newMovie);
+    //Used FS Model - Not used DB
+    // const newId=movies[movies.length-1].id+1;
+    // const newMovie=Object.assign({id:newId}, req.body);
 
-    fs.writeFile("./data/movies.json", JSON.stringify(movies), (err)=>{
+    // movies.push(newMovie);
+
+    // fs.writeFile("./data/movies.json", JSON.stringify(movies), (err)=>{
+    //     res.status(201).json({
+    //         status:"success",
+    //         data:{
+    //             movie:newMovie
+    //         }
+    //     })
+    // })
+
+
+
+    //MVC - Method(Used DB):
+
+    try{
+        const movie=await Movie.create(req.body);
         res.status(201).json({
-            status:"success",
+            status:'success',
             data:{
-                movie:newMovie
+                movie
             }
         })
-    })
+
+    }
+    catch(err){
+        res.status(400).json({
+            status:'fail',
+            message:err.message
+        })
+    }
 }
 
 
