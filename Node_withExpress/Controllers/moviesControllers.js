@@ -151,9 +151,9 @@ exports.getMovieByID= async (req, res)=>{
     }
 }
 
-exports.updateMovieByID=(req, res)=>{
-    let id=req.params.id*1;
-    let movieUpdate=movies.find(el=>el.id===id);
+exports.updateMovieByID=async (req, res)=>{
+    // let id=req.params.id*1;
+    // let movieUpdate=movies.find(el=>el.id===id);
 
     // if(!movieUpdate){
     //     res.status(404).json({
@@ -162,27 +162,46 @@ exports.updateMovieByID=(req, res)=>{
     //     })
     // }
 
-    let index=movies.indexOf(movieUpdate);
+    // let index=movies.indexOf(movieUpdate);
 
-    Object.assign(movieUpdate, req.body);
+    // Object.assign(movieUpdate, req.body);
 
-    movies[index]=movieUpdate;
+    // movies[index]=movieUpdate;
 
-    fs.writeFile('./data/movies.json', JSON.stringify(movies),(err)=>{
+    // fs.writeFile('./data/movies.json', JSON.stringify(movies),(err)=>{
+    //     res.status(200).json({
+    //         status:"success",
+    //         data:{
+    //             movie:movieUpdate
+    //         }
+    //     })
+    // })
+
+    //Using mongodb:
+
+    try{
+        const updateMovie=await Movie.findByIdAndUpdate(req.params.id, req.body, {new:true, runValidators:true});
+
         res.status(200).json({
             status:"success",
             data:{
-                movie:movieUpdate
+                movie:updateMovie
             }
         })
-    })
+    }
+    catch(err){
+        res.status(400).json({
+            status:"fail",
+            message:err.message
+        })
+    }
 
 }
 
-exports.deleteMovieByID=(req,res)=>{
-    let id=req.params.id*1;
-    const movieToDelete=movies.find(el=>el.id===id);
-    const index=movies.indexOf(movieToDelete);
+exports.deleteMovieByID= async (req,res)=>{
+    // let id=req.params.id*1;
+    // const movieToDelete=movies.find(el=>el.id===id);
+    // const index=movies.indexOf(movieToDelete);
 
     // if(!movieToDelete){
     //     res.status(404).json({
@@ -192,14 +211,30 @@ exports.deleteMovieByID=(req,res)=>{
     // }
 
 
-    movies.splice(index,1);
-    fs.writeFile('./data/movies.json', JSON.stringify(movies), (err)=>{
+    // movies.splice(index,1);
+    // fs.writeFile('./data/movies.json', JSON.stringify(movies), (err)=>{
+    //     res.status(204).json({
+    //         status:"success",
+    //         data:{
+    //             movie:null
+    //         }
+    //     })
+    // })
+
+
+    //using mongodb:
+
+    try{
+        const deleteMovie=await Movie.findByIdAndDelete(req.params.id);
         res.status(204).json({
             status:"success",
-            data:{
-                movie:null
-            }
+            data:null
+        });
+    }
+    catch(err){
+        res.status(400).json({
+            status:"fail",
+            message:err.message
         })
-    })
-
+    }
 }
