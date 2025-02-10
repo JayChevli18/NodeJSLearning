@@ -52,7 +52,27 @@ exports.getAllMovie= async (req, res)=>{
 
     //Using Mongo:
     try{
-        const movie=await Movie.find();
+        //const movie=await Movie.find(req.query);// Query String http://localhost:4000/api/v1/movies?duration=147&ratings=2
+
+        // const movie=await Movie.find()
+        //             .where('duration')
+        //             .gte(req.query.duration)
+        //             .where('ratings')
+        //             .gte(req.query.ratings)
+        //             .where('price')
+        //             .lte(req.query.price);
+
+        let query=Movie.find(); 
+
+        //http://localhost:4000/api/v1/movies?sort=-ratings
+        if(req.query.sort){
+            const sortBy=req.query.sort.split(',').join(' ');
+            query=query.sort(sortBy);
+        }
+        else{
+            query=query.sort('-createdAt');
+        }
+        const movie=await query;
 
         res.status(200).json({
             status:"success",
