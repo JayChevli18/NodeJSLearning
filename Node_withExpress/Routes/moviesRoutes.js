@@ -5,6 +5,8 @@ const router=express.Router();
 
 //router.param('id', movieController.checkId)
 
+router.route('/highest-rated').get(movieController.getHighestRated, movieController.getAllMovie);
+
 router.route('/')
     .get(movieController.getAllMovie)
     .post(movieController.createMovie);

@@ -35,7 +35,11 @@ exports.validateBody=(req, res, next)=>{
     next();
 }
 
-
+exports.getHighestRated=(req,res,next)=>{
+    req.query.limit='5';
+    req.query.sort='-ratings';
+    next();
+}
 
 
 exports.getAllMovie= async (req, res)=>{
