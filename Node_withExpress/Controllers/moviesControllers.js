@@ -64,6 +64,7 @@ exports.getAllMovie= async (req, res)=>{
 
         let query=Movie.find(); 
 
+        //Sorting
         //http://localhost:4000/api/v1/movies?sort=-ratings
         if(req.query.sort){
             const sortBy=req.query.sort.split(',').join(' ');
@@ -72,6 +73,21 @@ exports.getAllMovie= async (req, res)=>{
         else{
             query=query.sort('-createdAt');
         }
+
+
+        //Limiting Fields
+        //http://localhost:4000/api/v1/movies?fields=-name,-duration - not include name and duration in response
+        //http://localhost:4000/api/v1/movies?fields=name,duration  - included only name and duration in response
+        if(req.query.fields){
+            const fields=req.query.fields.split(',').join(' ');
+            console.log("Fields: ", fields);
+            console.log("Query: ", req.query);
+            query=query.select(fields);
+        }
+        else{
+            query=query.select('-__v');
+        }
+
         const movie=await query;
 
         res.status(200).json({
