@@ -88,6 +88,21 @@ exports.getAllMovie= async (req, res)=>{
             query=query.select('-__v');
         }
 
+
+        //Pagination
+        const page=req.query.page*1 || 1;
+        const limit=req.query.limit*1 || 10;
+        //Page 1: 1-10 | Page 2: 11-20 | Page 3: 21-30
+        const skip=(page-1)*limit;
+        query=query.skip(skip).limit(limit);
+
+        if(req.query.page){
+            const movieCnt=await Movie.countDocuments();
+            if(skip>=movieCnt){
+                throw new Error("Page not found!");
+            }
+        }
+ 
         const movie=await query;
 
         res.status(200).json({

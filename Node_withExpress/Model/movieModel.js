@@ -33,7 +33,8 @@ const movieSchema=new mongoose.Schema({
     },
     createdAt:{
         type: Date,
-        default: Date.now()
+        default: Date.now(),
+        select: false //This row will not get displayed in api response data
     },
     genres:{
         type: [String],
