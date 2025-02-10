@@ -7,6 +7,10 @@ const router=express.Router();
 
 router.route('/highest-rated').get(movieController.getHighestRated, movieController.getAllMovie);
 
+router.route('/movie-stats').get(movieController.getMovieStats);
+
+router.route('/movie-by-genre/:genre').get(movieController.getMovieByGenre);
+
 router.route('/')
     .get(movieController.getAllMovie)
     .post(movieController.createMovie);
