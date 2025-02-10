@@ -1,7 +1,7 @@
 const fs=require("fs");
 //const movies=require('../Model/movieModel.js');
 const Movie = require("../Model/movieModel.js");
-
+const ApiFeatures=require("../utils/ApiFeatures.js");
 //let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
 
 
@@ -66,48 +66,55 @@ exports.getAllMovie= async (req, res)=>{
         //             .where('price')
         //             .lte(req.query.price);
 
-        let query=Movie.find(); 
+        const features=new ApiFeatures(Movie.find(), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+        const movie=await features.query;
+
+        // let query=Movie.find(); 
 
         //Sorting
         //http://localhost:4000/api/v1/movies?sort=-ratings
-        if(req.query.sort){
-            const sortBy=req.query.sort.split(',').join(' ');
-            query=query.sort(sortBy);
-        }
-        else{
-            query=query.sort('-createdAt');
-        }
+        // if(req.query.sort){
+        //     const sortBy=req.query.sort.split(',').join(' ');
+        //     query=query.sort(sortBy);
+        // }
+        // else{
+        //     query=query.sort('-createdAt');
+        // }
 
 
         //Limiting Fields
         //http://localhost:4000/api/v1/movies?fields=-name,-duration - not include name and duration in response
         //http://localhost:4000/api/v1/movies?fields=name,duration  - included only name and duration in response
-        if(req.query.fields){
-            const fields=req.query.fields.split(',').join(' ');
-            console.log("Fields: ", fields);
-            console.log("Query: ", req.query);
-            query=query.select(fields);
-        }
-        else{
-            query=query.select('-__v');
-        }
+        // if(req.query.fields){
+        //     const fields=req.query.fields.split(',').join(' ');
+        //     console.log("Fields: ", fields);
+        //     console.log("Query: ", req.query);
+        //     query=query.select(fields);
+        // }
+        // else{
+        //     query=query.select('-__v');
+        // }
 
 
         //Pagination
-        const page=req.query.page*1 || 1;
-        const limit=req.query.limit*1 || 10;
+        // const page=req.query.page*1 || 1;
+        // const limit=req.query.limit*1 || 10;
         //Page 1: 1-10 | Page 2: 11-20 | Page 3: 21-30
-        const skip=(page-1)*limit;
-        query=query.skip(skip).limit(limit);
+        // const skip=(page-1)*limit;
+        // query=query.skip(skip).limit(limit);
 
-        if(req.query.page){
-            const movieCnt=await Movie.countDocuments();
-            if(skip>=movieCnt){
-                throw new Error("Page not found!");
-            }
-        }
+        // if(req.query.page){
+        //     const movieCnt=await Movie.countDocuments();
+        //     if(skip>=movieCnt){
+        //         throw new Error("Page not found!");
+        //     }
+        // }
  
-        const movie=await query;
+        // const movie=await query;
 
         res.status(200).json({
             status:"success",
