@@ -185,11 +185,29 @@ app.use('/api/v1/movies', moviesRouter);
 
 //Default Route - Error Handling
 app.all('*', (req,res,next)=>{
-    res.status(404).json({
-        status:'fail',
-        message: `Can't find ${req.originalUrl} on the server!`
-    });    
+    // res.status(404).json({
+    //     status:'fail',
+    //     message: `Can't find ${req.originalUrl} on the server!`
+    // });    
+
+    const err=new Error(`Can't find ${req.originalUrl} on the server!`);
+    err.status="fail",
+    err.statusCode=404;
+
+    next(err);//If you pass anything as a parameter in next() function, then it will take it as error and then pass the function to the global error handler.
 })
+
+
+//Global Error Handling
+//all the next(100), next(err) will call this global error handler as it has 'error' as an argument.
+app.use((error, req,res,next)=>{
+    error.statusCode=error.statusCode || 500;
+    error.status=error.status || 'error';
+    res.status(error.statusCode).json({
+        status:error.statusCode,
+        message:error.message
+    });
+});
 
 // const port=4000;
 // app.listen(port, ()=>{
