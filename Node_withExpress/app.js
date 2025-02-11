@@ -6,6 +6,7 @@ const moviesRouter=require('./Routes/moviesRoutes');
 const dotenv=require("dotenv");
 const CustomError = require("./utils/CustomError");
 const globalErrorHandler=require('./Controllers/errorController');
+const authRouter=require('./Routes/authRoutes');
 
 dotenv.config();
 
@@ -185,6 +186,9 @@ app.use((req,res, next)=>{
 //     .delete(deleteMovieByID)
 
 app.use('/api/v1/movies', moviesRouter);
+
+//Auth Route:
+app.use('/api/v1/users', authRouter);
 
 //Default Route - Error Handling
 app.all('*', (req,res,next)=>{
