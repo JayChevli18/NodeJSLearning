@@ -1,5 +1,6 @@
 const mongoose=require("mongoose");
 const fs=require('fs');
+const validator=require('validator');
 
 const movieSchema=new mongoose.Schema({
     name:{
@@ -8,17 +9,23 @@ const movieSchema=new mongoose.Schema({
         unique: true,
         trim:true,
         maxlength: [100, 'Movie name must not have more than 100 characters'],
-        minlength: [2, 'Movie name must have at least 1 character']
+        minlength: [2, 'Movie name must have at least 1 character'],
     },
 
     description: {
         type: String,
-        required: [true, 'Description is required field!']
+        required: [true, 'Description is required field!'],
     },
 
     duration:{
         type: Number,
-        required: [true, 'Duration is required!']
+        required: [true, 'Duration is required!'],
+        validate: {
+            validator: function(value){
+                return Number.isInteger(value);
+            },
+            message: "Duration should be of Integer type!"
+        }
     },
     ratings:{
         type: Number,
@@ -27,14 +34,20 @@ const movieSchema=new mongoose.Schema({
         max: [5, 'Ratings must be 5 or less']
     },
     totalRating:{
-        type: Number
+        type: Number,
+        validate: {
+            validator: function(value){
+                return value >=1;
+            },
+            message: "Total Ratings should be greater than 0"
+        }
     }, 
     releaseYear:{
         type: Number,
         required: [true, 'Release Year is required field!']
     },
     releaseDate:{
-        type: Date
+        type: Date,
     },
     createdAt:{
         type: Date,
@@ -51,7 +64,7 @@ const movieSchema=new mongoose.Schema({
     },
     directors:{
         type: [String],
-        required: [true, 'Directors is required field!']
+        required: [true, 'Directors is required field!'],
     },
     coverImage:{
         type:String,
@@ -66,7 +79,7 @@ const movieSchema=new mongoose.Schema({
         required: [true, 'Price is required!']
     },
     createdBy:{
-        type: String
+        type: String,
     }
 
 
@@ -124,6 +137,7 @@ movieSchema.post(/^find/, function(docs, next){
 
 //Aggregation Middleware
 //unshift() - to keep that match at 0-index in array.
+//add this whenever the aggregate event is called
 movieSchema.pre('aggregate', function(next){
     console.log(this.pipeline().unshift({$match: {releaseDate:{$lte:new Date()}}}));
     next();
