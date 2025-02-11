@@ -135,6 +135,7 @@ exports.getAllMovie = async (req, res) => {
 exports.getMovieStats = async (req, res) => {
     try {
         const stats = await Movie.aggregate([
+            //{$match: {releaseDate:{$lte:new Date()}}}, - Using this for all 'aggregate' - that's why created an Aggregation middleware - used unshift to keep this at first.
             { $match: { ratings: { $gt: 3 } } },
             { $group: {
                 _id: '$releaseYear',
@@ -146,7 +147,7 @@ exports.getMovieStats = async (req, res) => {
                 movieCount: {$sum: 1}
             }},
             {$sort: {minPrice:1}},
-            {$match: {maxPrice:{$gte:35}}}
+            // {$match: {maxPrice:{$gte:35}}}
         ])
 
         res.status(200).json({

@@ -10,3 +10,27 @@ Query took 37 milliseconds to fetch documents
 Query took 28 milliseconds to fetch documents
 Query took 26 milliseconds to fetch documents
 Query took 20 milliseconds to fetch documents
+A new movie document with name James 007 is created by Jay
+Query took 22 milliseconds to fetch documents
+Query took 27 milliseconds to fetch documents
+Query took 30 milliseconds to fetch documents
+Query took 31 milliseconds to fetch documents
+Query took 27 milliseconds to fetch documents
+A new movie document with name James Bond is created by Jay
+Query took 24 milliseconds to fetch documents
+Query took 23 milliseconds to fetch documents
+Query took 25 milliseconds to fetch documents
+Query took 26 milliseconds to fetch documents
+Query took 29 milliseconds to fetch documents
+Query took 27 milliseconds to fetch documents
+Query took 19 milliseconds to fetch documents
+Query took 24 milliseconds to fetch documents
+Query took 20 milliseconds to fetch documents
+Query took 23 milliseconds to fetch documents
+Query took 27 milliseconds to fetch documents
+Query took 26 milliseconds to fetch documents
+Query took 24 milliseconds to fetch documents
+A new movie document with name Resident Evil is created by Jay
+Query took 23 milliseconds to fetch documents
+Query took 19 milliseconds to fetch documents
+Query took 43 milliseconds to fetch documents
