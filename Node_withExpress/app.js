@@ -11,7 +11,8 @@ dotenv.config();
 
 mongoose.connect(process.env.MONGOURL,{
     useNewUrlParser:true
-}).then((conn)=>console.log("conn")).catch((err)=>{console.log("errpr", err)});
+}).then((conn)=>console.log("conn"))
+// .catch((err)=>{console.log("errpr", err)});
 
 
 // const testMovie=new Movie({

@@ -37,3 +37,8 @@ Query took 43 milliseconds to fetch documents
 A new movie document with name IJ is created by Jay
 Query took 31 milliseconds to fetch documents
 Query took 39 milliseconds to fetch documents
+Query took 43 milliseconds to fetch documents
+Query took 27 milliseconds to fetch documents
+Query took 28 milliseconds to fetch documents
+Query took 20 milliseconds to fetch documents
+Query took 25 milliseconds to fetch documents
