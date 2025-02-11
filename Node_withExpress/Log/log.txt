@@ -1,0 +1,12 @@
+A new movie document with name Conjuring is created by undefined
+A new movie document with name Conjuring 2 is created by undefined
+A new movie document with name Conjuring 3 is created by Jay
+Query took 33 milliseconds to fetch documents
+Query took 27 milliseconds to fetch documents
+Query took 36 milliseconds to fetch documents
+Query took 35 milliseconds to fetch documents
+Query took 35 milliseconds to fetch documents
+Query took 37 milliseconds to fetch documents
+Query took 28 milliseconds to fetch documents
+Query took 26 milliseconds to fetch documents
+Query took 20 milliseconds to fetch documents
