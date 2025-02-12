@@ -1,5 +1,6 @@
 const express=require("express");
 const movieController=require('../Controllers/moviesControllers');
+const authController=require('../Controllers/authController');
 
 const router=express.Router();
 
@@ -12,7 +13,7 @@ router.route('/movie-stats').get(movieController.getMovieStats);
 router.route('/movie-by-genre/:genre').get(movieController.getMovieByGenre);
 
 router.route('/')
-    .get(movieController.getAllMovie)
+    .get(authController.protect,movieController.getAllMovie)
     .post(movieController.createMovie);
     //.post(movieController.validateBody,movieController.createMovie) //Firstly it will execute validatebody middleware which will che if the request contain body or not...then if it successfull then createMovie will be executed
 

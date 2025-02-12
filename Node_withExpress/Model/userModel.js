@@ -20,6 +20,7 @@ const userSchema=new mongoose.Schema({
         type: String,
         required: [true, 'Please Enter a Password.'],
         minlength: 8,
+        select: false
     },
     confirmPassword:{
         type:String,
@@ -42,6 +43,15 @@ userSchema.pre('save', async function (next) {
     this.confirmPassword=undefined;
     next();
 })
+
+
+//This is an instance method which is created on userSchema.
+//This method will allow us to compare password provided while login and password which is stored in DB. 
+//Here pswd will get hashed and then compared with pswdDb.
+userSchema.methods.comparePasswordInDb=async function(pswd, pswdDb){
+    return await bcrypt.compare(pswd, pswdDb);
+}
+
 
 const User=mongoose.model('User', userSchema);
 module.exports=User;
