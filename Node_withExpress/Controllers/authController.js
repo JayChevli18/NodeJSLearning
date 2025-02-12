@@ -71,7 +71,25 @@ exports.protect = async (req, res, next) => {
         //2. Validate the token
         const decodedToken = jwt.verify(token, process.env.SECRET_STR);
         console.log(decodedToken);
+        
+        //3. If user exists
+        const user=await User.findById(decodedToken.id);
+        if(!user){
+            const error=new CustomError('The user with the given token does not exist!',401);
+            next(error);
+        }
+
+        const isPasswordChanged=await user.isPasswordChanged(decodedToken.iat);
+        if(isPasswordChanged){
+            const error=new CustomError('The Password has been changed recently. Please try again.',401);
+            return next(error);
+        }
+        
+        //5. Allow user to access route
+        req.user=user;
         next();
+
+
     }
     catch (err) {
         next(err);

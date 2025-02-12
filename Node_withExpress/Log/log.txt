@@ -50,3 +50,5 @@ Query took 22 milliseconds to fetch documents
 Query took 29 milliseconds to fetch documents
 Query took 27 milliseconds to fetch documents
 Query took 39 milliseconds to fetch documents
+Query took 26 milliseconds to fetch documents
+Query took 29 milliseconds to fetch documents
