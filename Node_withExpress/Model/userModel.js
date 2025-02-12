@@ -16,6 +16,12 @@ const userSchema=new mongoose.Schema({
     photo:{
         type: String
     },
+    role:{
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }
+    ,
     password:{
         type: String,
         required: [true, 'Please Enter a Password.'],
@@ -35,6 +41,7 @@ const userSchema=new mongoose.Schema({
     passwordChangedAt: {
         type: Date
     }
+
 })
 
 

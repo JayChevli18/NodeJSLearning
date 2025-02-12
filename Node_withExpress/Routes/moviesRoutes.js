@@ -18,9 +18,9 @@ router.route('/')
     //.post(movieController.validateBody,movieController.createMovie) //Firstly it will execute validatebody middleware which will che if the request contain body or not...then if it successfull then createMovie will be executed
 
 router.route('/:id')
-    .get(movieController.getMovieByID)
+    .get(authController.protect, movieController.getMovieByID)
     .patch(movieController.updateMovieByID)
-    .delete(movieController.deleteMovieByID)
+    .delete(authController.protect, authController.restrict('user'),movieController.deleteMovieByID)
 // app.use('/api/v1/movies', moviesRouter);
 
 router.all('*',(req,res,next)=>{

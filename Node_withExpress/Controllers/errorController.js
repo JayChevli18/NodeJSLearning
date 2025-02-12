@@ -5,7 +5,7 @@ const handleTokenExpiredError=(err)=>{
 }
 
 const handleJsonWebTokenError=(err)=>{
-    return new CustomError('Invalid Token, Please Login Again!', 401);
+    return new CustomError('Invalid Token, Please try Again!', 401);
 }
 
 
