@@ -7,6 +7,7 @@ const dotenv=require("dotenv");
 const CustomError = require("./utils/CustomError");
 const globalErrorHandler=require('./Controllers/errorController');
 const authRouter=require('./Routes/authRoutes');
+const userRouter=require('./Routes/userRoutes');
 
 dotenv.config();
 
@@ -188,7 +189,10 @@ app.use((req,res, next)=>{
 app.use('/api/v1/movies', moviesRouter);
 
 //Auth Route:
-app.use('/api/v1/users', authRouter);
+app.use('/api/v1/auth', authRouter);
+
+//User Route:
+app.use('/api/v1/users', userRouter);
 
 //Default Route - Error Handling
 app.all('*', (req,res,next)=>{

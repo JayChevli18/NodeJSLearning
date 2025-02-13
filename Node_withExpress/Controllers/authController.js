@@ -9,19 +9,23 @@ const signToken = (id) => {
     return jwt.sign({ id }, process.env.SECRET_STR, { expiresIn: process.env.LOGIN_EXPIRES });
 }
 
+exports.sendCreateResponse=(user, statusCode, res)=>{
+    const token=signToken(user._id);
+    res.status(statusCode).json({
+        status:"success",
+        token,
+        data:{
+            user
+        }
+    })
+}
+
 exports.signup = async (req, res) => {
     try {
         const newUser = await User.create(req.body);
 
-        const token = signToken(newUser._id);
-
-        res.status(201).json({
-            status: 'success',
-            token,
-            data: {
-                user: newUser
-            }
-        })
+        // const token = signToken(newUser._id);
+        this.sendCreateResponse(newUser, 201, res);
     }
     catch (err) {
         res.status(400).json({
@@ -192,3 +196,6 @@ exports.resetPassword = async (req, res, next) => {
         next(error);
     }
 }
+
+
+
