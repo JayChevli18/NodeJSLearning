@@ -11,6 +11,16 @@ const signToken = (id) => {
 
 exports.sendCreateResponse=(user, statusCode, res)=>{
     const token=signToken(user._id);
+
+    const options={
+        maxAge: process.env.LOGIN_EXPIRES,
+        httpOnly: true
+    }
+    //        secure:true - This will allow only request comming from httpS://
+
+    res.cookie('jwt', token, options);
+    user.password=undefined;
+
     res.status(statusCode).json({
         status:"success",
         token,
