@@ -11,6 +11,7 @@ const userRouter=require('./Routes/userRoutes');
 const rateLimit=require('express-rate-limit');
 const helmet=require('helmet');
 const sanitize=require('express-mongo-sanitize');
+const hpp=require('hpp');
 
 dotenv.config();
 
@@ -43,6 +44,13 @@ let app=express();
 //It will not allow nosql query which are passed in request body.
 app.use(sanitize());
 
+
+//Preventing Parameter Pollution
+//hpp - http parameter pollution
+//This is used when I want to pass same query string more than one.
+//for example: http://localhost:4000/api/v1/movies?sort=price&sort=ratings
+//Here duration is passed twice. So this hpp will allow me. If don't use this then it will throw an error.
+app.use(hpp());
 
 
 //Added Helmet for Security
