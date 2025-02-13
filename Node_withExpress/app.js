@@ -9,6 +9,8 @@ const globalErrorHandler=require('./Controllers/errorController');
 const authRouter=require('./Routes/authRoutes');
 const userRouter=require('./Routes/userRoutes');
 const rateLimit=require('express-rate-limit');
+const helmet=require('helmet');
+const sanitize=require('express-mongo-sanitize');
 
 dotenv.config();
 
@@ -34,6 +36,19 @@ mongoose.connect(process.env.MONGOURL,{
 
 let app=express();
 // let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
+
+
+//Added Data Santization Middleware
+//It will not allow data which contain . or $.
+//It will not allow nosql query which are passed in request body.
+app.use(sanitize());
+
+
+
+//Added Helmet for Security
+//It will add more number of Headers for security purpose
+app.use(helmet());
+
 
 
 //Rate Limiter
