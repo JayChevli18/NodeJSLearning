@@ -8,6 +8,7 @@ const CustomError = require("./utils/CustomError");
 const globalErrorHandler=require('./Controllers/errorController');
 const authRouter=require('./Routes/authRoutes');
 const userRouter=require('./Routes/userRoutes');
+const rateLimit=require('express-rate-limit');
 
 dotenv.config();
 
@@ -33,6 +34,16 @@ mongoose.connect(process.env.MONGOURL,{
 
 let app=express();
 // let movies=JSON.parse(fs.readFileSync("./data/movies.json"));
+
+
+//Rate Limiter
+let limiter=rateLimit({
+    max:3,
+    windowMs: 5*60*1000,
+    message: 'We had received too many requests from this IP. Please try after 5 minutes'
+});
+app.use('/api', limiter);
+
 
 app.use(express.json());
 
