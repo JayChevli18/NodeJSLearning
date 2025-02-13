@@ -2,8 +2,8 @@ const User = require('../Model/userModel');
 const CustomError = require('../utils/CustomError');
 const jwt = require('jsonwebtoken');
 const util = require('util');
-const sendEmail=require('../utils/SendEmail');
-
+const sendEmail = require('../utils/SendEmail');
+const crypto = require('crypto');
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.SECRET_STR, { expiresIn: process.env.LOGIN_EXPIRES });
@@ -114,25 +114,24 @@ exports.forgotPassword = async (req, res, next) => {
     try {
         //1. Get user based on posted mail
         const user = await User.findOne({ email: req.body.email });
-        if(!user){
-            const error=new CustomError('We could not find the user with given email.', 404);
+        if (!user) {
+            const error = new CustomError('We could not find the user with given email.', 404);
             next(error);
         }
 
         //2. Generate a random reset token
-        const resetToken=user.createResetPasswordToken();
-  //      console.log("AA: ",resetToken);
-        await user.save({validateBeforeSave:false});
+        const resetToken = user.createResetPasswordToken();
+        //      console.log("AA: ",resetToken);
+        await user.save({ validateBeforeSave: false });
 
 
         //3. Send the token back to the user email
-        const resetUrl=`${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
- //       console.log(resetUrl);
+        const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        //       console.log(resetUrl);
         const message = `We have received a password reset request. Please use this below link to reset your password.\n\n${resetUrl}\n\nThis reset password link will be valid for 10 minutes.`;
-        
-        try
-        {
-            console.log("XX");   
+
+        try {
+            console.log("XX");
             await sendEmail({
                 email: user.email,
                 subject: 'Password Change request received',
@@ -144,11 +143,11 @@ exports.forgotPassword = async (req, res, next) => {
                 message: 'password reset link send to the user email'
             })
         }
-        catch(err){
+        catch (err) {
             console.log("SSSSSSSS");
-            user.passwordResetToken=undefined;
-            user.passwordResetTokenExpires=undefined;
-            user.save({validateBeforeSave: false});
+            user.passwordResetToken = undefined;
+            user.passwordResetTokenExpires = undefined;
+            user.save({ validateBeforeSave: false });
 
             return next(new CustomError('There was error sending password reset email. Please try again after some time', 500));
         }
@@ -159,6 +158,37 @@ exports.forgotPassword = async (req, res, next) => {
 
 }
 
-exports.resetPassword = (req, res, next) => {
+exports.resetPassword = async (req, res, next) => {
+    try {
+        const token = crypto.createHash('sha256').update(req.params.token).digest('hex');
+        const user = await User.findOne({ passwordResetToken: token, passwordResetTokenExpires: { $gt: Date.now() } });
 
+        if (!user) {
+            const error = new CustomError("Token is invalid or expired!", 400);
+            return next(error);
+        }
+
+        if(req.body.password!==req.body.confirmPassword){
+            return next(new CustomError('Password do not match!',400));
+        }
+
+        console.log(user, "SS");
+        user.password = req.body.password;
+        user.confirmPassword = req.body.confirmPassword;
+        user.passwordResetToken = undefined;
+        user.passwordResetTokenExpires = undefined;
+        user.passwordChangedAt = Date.now();
+
+        await user.save();
+
+        const loginToken = signToken(user._id);
+        console.log("AA", loginToken);
+        res.status(200).json({
+            status: "success",
+            token: loginToken
+        })
+    }
+    catch (error) {
+        next(error);
+    }
 }
